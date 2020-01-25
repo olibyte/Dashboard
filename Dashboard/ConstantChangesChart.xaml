@@ -33,7 +33,7 @@
 
         <lvc:CartesianChart Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" DisableAnimations="False" Hoverable="False" DataTooltip="{x:Null}">
             <lvc:CartesianChart.Series>
-                <lvc:LineSeries Values="{Binding CharValues}" Name="lsEfficiency" PointGeometry="{x:Null}" LineSmoothness="0"
+                <lvc:LineSeries Values="{Binding ChartValues}" Name="lsEfficiency" PointGeometry="{x:Null}" LineSmoothness="0"
                                 StrokeThickness="2" Stroke="Yellow" Fill="Transparent"/>
             </lvc:CartesianChart.Series>
             <lvc:CartesianChart.AxisX>

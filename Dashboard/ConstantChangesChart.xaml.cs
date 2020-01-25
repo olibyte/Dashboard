@@ -25,6 +25,9 @@ namespace Dashboard
     /// </summary>
     public partial class ConstantChangesChart : UserControl, INotifyPropertyChanged
     {
+        private static long tickZero = DateTime.Parse("2018-01-01T08:00:00Z").Ticks;
+
+        public Func<double, string> X_Axis_LabelFormatter { get; set; } = d => TimeSpan.FromTicks((long)d - tickZero).TotalSeconds.ToString();
         public ConstantChangesChart()
         {
             InitializeComponent();
@@ -43,7 +46,6 @@ namespace Dashboard
                 Task.Factory.StartNew(ReadData);
             }
             readingData = !readingData;
-            
         }
         private void ReadData()
         {
