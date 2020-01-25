@@ -1,9 +1,11 @@
 ﻿using CodeClinic;
 using LiveCharts;
+using LiveCharts.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +28,8 @@ namespace Dashboard
         {
             InitializeComponent();
 
+            lsEfficiency.Configuration = Mappers.Xy<FactoryTelemetry>().X(ft => ft.TimeStamp.Ticks).Y(ft => ft.Efficiency);
+
             DataContext = this;
         }
         public ChartValues<FactoryTelemetry> ChartValues { get; set; } = new ChartValues<FactoryTelemetry>();
@@ -43,6 +47,19 @@ namespace Dashboard
         private void ReadData()
         {
             //TODO: Populate the collection ChartValues
+
+            string filename = @"";
+
+            foreach(var ft in FactoryTelemetry.Load(filename))
+            {
+                ChartValues.Add(ft);
+
+                if (ChartValues.Count > 30)
+                {
+                    ChartValues.Remove(0);
+                }
+                Thread.Sleep(30);
+            }
         }
     }
 }
