@@ -41,7 +41,7 @@ namespace Dashboard
         private bool readingData = false;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(!readingData)
+            if (!readingData)
             {
                 Task.Factory.StartNew(ReadData);
             }
@@ -53,7 +53,7 @@ namespace Dashboard
 
             string filename = @"C:\Users\ocben\source\repos\Dashboard\dashBoardData.csv";
 
-            foreach(var ft in FactoryTelemetry.Load(filename))
+            foreach (var ft in FactoryTelemetry.Load(filename))
             {
                 ChartValues.Add(ft);
 
@@ -66,9 +66,24 @@ namespace Dashboard
                 Thread.Sleep(30);
             }
         }
+        public double AxisStep { get; set; } = TimeSpan.FromSeconds(5).Ticks;
+        public double AxisUnit { get; set; } = TimeSpan.FromSeconds(1).Ticks;
+
+
+        private double _axisMax = tickZero + TimeSpan.FromSeconds(30).Ticks;
+        public double AxisMax { get => _axisMax; set { _axisMax = value; OnPropertyChanged(nameof(AxisMax)); } }
+        private double _axisMin = tickZero;
+        public double AxisMin { get => _axisMin; set { _axisMin = value; OnPropertyChanged(nameof(AxisMin)); } }
+
+        private void AdjustAxis(long ticks)
+        {
+
+        }
         private double _EngineEfficiency = 65;
-        public double EngineEfficiency {
-            get 
+
+        public double EngineEfficiency
+        {
+            get
             {
                 return _EngineEfficiency;
             }
