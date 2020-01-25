@@ -19,7 +19,7 @@
             <ColumnDefinition Width="80*"/>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="0" Grid.Column="1" Click="">Start/Stop</Button>
+        <Button Grid.Row="0" Grid.Column="1" Click="Button_Click">Start/Stop</Button>
 
         <lvc:AngularGauge Grid.Row="1" Grid.Column="0" FromValue="60" ToValue="90" Name="TheGauge">
             <lvc:AngularGauge.Sections>

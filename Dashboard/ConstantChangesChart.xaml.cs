@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CodeClinic;
+using LiveCharts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,24 @@ namespace Dashboard
         public ConstantChangesChart()
         {
             InitializeComponent();
+
+            DataContext = this;
+        }
+        public ChartValues<FactoryTelemetry> ChartValues { get; set; } = new ChartValues<FactoryTelemetry>();
+
+        private bool readingData = false;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(!readingData)
+            {
+                Task.Factory.StartNew(ReadData);
+            }
+            readingData = !readingData;
+            
+        }
+        private void ReadData()
+        {
+            //TODO: Populate the collection ChartValues
         }
     }
 }
