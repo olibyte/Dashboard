@@ -34,6 +34,13 @@ namespace Dashboard
 
             lsEfficiency.Configuration = Mappers.Xy<FactoryTelemetry>().X(ft => ft.TimeStamp.Ticks).Y(ft => ft.Efficiency);
 
+            lsPulse.Configuration = Mappers.Xy<FactoryTelemetry>().X(ft => ft.TimeStamp.Ticks).Y(ft => ft.Pulse);
+
+            lsRed.Configuration = Mappers.Xy<FactoryTelemetry>().X(ft => ft.TimeStamp.Ticks).Y(ft => ft.Red);
+            lsGreen.Configuration = Mappers.Xy<FactoryTelemetry>().X(ft => ft.TimeStamp.Ticks).Y(ft => ft.Green);
+            lsBlue.Configuration = Mappers.Xy<FactoryTelemetry>().X(ft => ft.TimeStamp.Ticks).Y(ft => ft.Blue);
+
+
             DataContext = this;
         }
         public ChartValues<FactoryTelemetry> ChartValues { get; set; } = new ChartValues<FactoryTelemetry>();
@@ -55,15 +62,19 @@ namespace Dashboard
 
             foreach (var ft in FactoryTelemetry.Load(filename))
             {
+                if (!readingData)
+                    return;
+
                 ChartValues.Add(ft);
 
                 this.EngineEfficiency = ft.Efficiency;
 
-                if (ChartValues.Count > 30)
-                {
+                AdjustAxis(ft.TimeStamp.Ticks);
+
+                if (ChartValues.Count > 30)    
                     ChartValues.RemoveAt(0);
-                }
-                Thread.Sleep(30);
+           
+                Thread.Sleep(60);
             }
         }
         public double AxisStep { get; set; } = TimeSpan.FromSeconds(5).Ticks;
@@ -72,12 +83,16 @@ namespace Dashboard
 
         private double _axisMax = tickZero + TimeSpan.FromSeconds(30).Ticks;
         public double AxisMax { get => _axisMax; set { _axisMax = value; OnPropertyChanged(nameof(AxisMax)); } }
+
         private double _axisMin = tickZero;
         public double AxisMin { get => _axisMin; set { _axisMin = value; OnPropertyChanged(nameof(AxisMin)); } }
 
         private void AdjustAxis(long ticks)
         {
+            var width = TimeSpan.FromSeconds(30).Ticks;
 
+            AxisMin = (ticks - tickZero < width) ? tickZero : ticks - width;
+            AxisMax = (ticks - tickZero < width) ? tickZero + width : ticks;
         }
         private double _EngineEfficiency = 65;
 
